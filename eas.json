@@ -2,10 +2,16 @@
   "cli": { "version": ">= 16.0.0" },
   "build": {
     "preview": {
-      "android": { "buildType": "apk" }
+      "android": { "buildType": "apk" },
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://ahar-api.centralindia.cloudapp.azure.com/api/v1"
+      }
     },
     "production": {
-      "android": { "buildType": "apk" }
+      "android": { "buildType": "apk" },
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://ahar-api.centralindia.cloudapp.azure.com/api/v1"
+      }
     }
   }
 }
