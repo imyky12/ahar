@@ -28,7 +28,7 @@
             "./assets/sounds/gentle.wav",
             "./assets/sounds/chime.wav",
             "./assets/sounds/alert.wav",
-            "./assets/sounds/default.wav"
+            "./assets/sounds/ahar_default.wav"
           ],
           "androidMode": "default"
         }

@@ -114,7 +114,7 @@ export const setupNotificationChannels = async (): Promise<void> => {
     await Notifications.setNotificationChannelAsync("ahar-default", {
       name: "General",
       importance: Notifications.AndroidImportance.DEFAULT,
-      sound: "default.wav",
+      sound: "ahar_default.wav",
       vibrationPattern: [0, 300],
       lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
     });
