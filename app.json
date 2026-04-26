@@ -1,0 +1,73 @@
+{
+  "expo": {
+    "name": "AHAR",
+    "slug": "ahar",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "ahar",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F1923"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#2D6A4F",
+          "sounds": [
+            "./assets/sounds/gentle.wav",
+            "./assets/sounds/chime.wav",
+            "./assets/sounds/alert.wav",
+            "./assets/sounds/default.wav"
+          ],
+          "androidMode": "default"
+        }
+      ],
+      "expo-secure-store"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ahar.app",
+      "infoPlist": {
+        "NSUserNotificationsUsageDescription": "AHAR sends meal reminders and wellness tips to help you stay on track with your diet and health goals."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#0F1923"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.ahar.app",
+      "versionCode": 1,
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "POST_NOTIFICATIONS"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.ico"
+    },
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3a720c40-dcad-4930-8960-12c82ce55728"
+      },
+      "router": {}
+    },
+    "owner": "imyky1"
+  }
+}
