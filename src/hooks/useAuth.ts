@@ -51,12 +51,9 @@ export const useAuth = () => {
         refreshToken: data.refreshToken,
       });
 
-      if (profile) {
-        router.replace("/(tabs)/dashboard");
-        return;
-      }
-
-      router.replace("/(auth)/onboarding");
+      // Don't route here — _layout.tsx will redirect correctly once
+      // getProfile() resolves. Routing based on stale in-memory profile
+      // causes a flash to onboarding on cold start even for existing users.
     } catch (nextError) {
       setError(getErrorMessage(nextError));
       throw nextError;

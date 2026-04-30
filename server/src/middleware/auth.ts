@@ -53,11 +53,22 @@ const applyLimiter = (
   );
 
   if (recentRequests.length >= max) {
+    store.set(key, recentRequests);
     return false;
   }
 
   recentRequests.push(now);
   store.set(key, recentRequests);
+
+  // Evict keys that have no recent requests to prevent unbounded memory growth
+  if (recentRequests.length === 1) {
+    setTimeout(() => {
+      const entries = store.get(key) ?? [];
+      if (entries.every((t) => now - t >= windowMs)) {
+        store.delete(key);
+      }
+    }, windowMs);
+  }
 
   return true;
 };

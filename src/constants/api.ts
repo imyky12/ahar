@@ -75,10 +75,6 @@ export const API_ROUTES = {
     logDose: (id: string) => `/medicines/${id}/log`,
     doses: "/medicines/doses",
   },
-  weekly: {
-    summary: "/weekly/summary",
-    checkin: "/weekly/checkin",
-  },
   progress: {
     checkin: "/progress/checkin",
     weeklySummary: "/progress/weekly-summary",

@@ -179,8 +179,24 @@ export const RootLayout = () => {
         } else {
           clearProfile();
         }
-      } catch {
-        clearProfile();
+      } catch (err) {
+        // Only clear profile on explicit auth rejection.
+        // Transient errors (timeout, 5xx, network blip) must NOT wipe the
+        // profile — doing so sends an onboarded user back to onboarding on
+        // any connectivity hiccup, and the server rejects the re-submission
+        // with 409 because the profile already exists.
+        const status =
+          err != null &&
+          typeof err === "object" &&
+          "response" in err &&
+          err.response != null &&
+          typeof err.response === "object" &&
+          "status" in err.response
+            ? (err.response as { status: number }).status
+            : undefined;
+        if (status === 401 || status === 403) {
+          clearProfile();
+        }
       } finally {
         setIsProfileLoading(false);
       }

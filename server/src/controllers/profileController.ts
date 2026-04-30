@@ -22,7 +22,6 @@ import { getUpcomingFestivals } from "../services/festivalService";
 import { AuthError } from "../utils/jwt";
 import {
   BadRequestError,
-  ConflictError,
   NotFoundError,
   UnauthorisedError,
 } from "../utils/errors";
@@ -182,13 +181,6 @@ export const createProfile: RequestHandler = async (req, res, next) => {
 
     const payload = req.body as ProfileCreateInput;
 
-    const existingProfile = await UserProfileModel.findOne({
-      userId: req.userId,
-    }).lean();
-    if (existingProfile) {
-      throw new ConflictError("Profile already exists");
-    }
-
     const tdee = calculateTDEE(payload);
     const hydrationGoalMl = calculateHydration(
       payload.weight,
@@ -196,15 +188,25 @@ export const createProfile: RequestHandler = async (req, res, next) => {
     );
     const macros = calculateMacros(tdee, payload.goal);
 
-    const profile = await UserProfileModel.create({
-      userId: req.userId,
-      ...payload,
-      tdee,
-      hydrationGoalMl,
-      macros,
-      isOnboardingComplete: true,
-      onboardingCompletedAt: new Date(),
-    });
+    // Upsert so that retrying onboarding after a network failure succeeds
+    // instead of throwing 409. onboardingCompletedAt is only set on first create.
+    const profile = await UserProfileModel.findOneAndUpdate(
+      { userId: req.userId },
+      {
+        $set: {
+          ...payload,
+          tdee,
+          hydrationGoalMl,
+          macros,
+          isOnboardingComplete: true,
+          isDeleted: false,
+        },
+        $setOnInsert: {
+          onboardingCompletedAt: new Date(),
+        },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true },
+    );
 
     await ActivityLogModel.create({
       userId: req.userId,
@@ -228,6 +230,7 @@ export const getProfile: RequestHandler = async (req, res, next) => {
 
     const profile = await UserProfileModel.findOne({
       userId: req.userId,
+      isDeleted: { $ne: true },
     }).lean();
 
     if (!profile) {
